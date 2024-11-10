@@ -13,9 +13,9 @@ function M.setup()
     vim.keymap.set('n', '<leader>sx', ':close<CR>', { desc = 'Close current split' })
 
     -- Buffer navigation
-    vim.keymap.set('n', '<S-l>', ':bnext<CR>', { desc = 'Next buffer' })
-    vim.keymap.set('n', '<S-h>', ':bprevious<CR>', { desc = 'Previous buffer' })
-    vim.keymap.set('n', '<leader>bd', ':bdelete<CR>', { desc = 'Close current buffer' })
+    -- vim.keymap.set('n', '<S-h>', ':bprevious<CR>', { desc = 'Previous buffer' })
+    -- vim.keymap.set('n', '<S-l>', ':bnext<CR>', { desc = 'Next buffer' })
+    -- vim.keymap.set('n', '<leader>bd', ':bdelete<CR>', { desc = 'Close current buffer' })
 
     -- Better indenting
     vim.keymap.set('v', '<', '<gv', { desc = 'Indent left and reselect' })
@@ -33,7 +33,7 @@ function M.setup()
     vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Previous search result and center' })
 
     -- Custom keymaps
-    vim.keymap.set("n", "<leader>cls", "0d$", { desc = "Clear lines contents" })            -- Clears current line of all text
+    vim.keymap.set("n", "<leader>cls", "0d$", { desc = "Clear lines contents" })              -- Clears current line of all text
     vim.keymap.set("n", "<leader>nl", "yyp0d$", { desc = "New empty line - no insert mode" }) -- Adds a new empty line below the current, but auto escapes the insert mode
 end
 
