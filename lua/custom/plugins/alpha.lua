@@ -4,186 +4,196 @@ return {
     config = function()
         local alpha = require 'alpha'
         local dashboard = require 'alpha.themes.dashboard'
+        local generateText = require "custom.scripts.generateId"
 
+        -- Get current working directory name
+        local function get_project_name()
+            local cwd = vim.fn.getcwd()
+            return vim.fn.fnamemodify(cwd, ':t')
+        end
 
+        -- Get last modified file
+        local function get_last_modified()
+            local handle = io.popen('ls -t | head -n 1')
+            if handle then
+                local result = handle:read("*a")
+                handle:close()
+                return result:gsub("^%s*(.-)%s*$", "%1")
+            end
+            return ""
+        end
 
+        -- Function to get project statistics
+        local function get_project_stats()
+            local stats = {
+                files = "0",
+                commits = "0",
+                branches = "0",
+                contributors = "0",
+                last_commit = "No commits"
+            }
 
+            -- Check if we're in a git repository
+            local is_git = vim.fn.system("git rev-parse --is-inside-work-tree 2>/dev/null"):find("true")
 
+            if is_git then
+                stats.files = vim.fn.system("git ls-files 2>/dev/null | wc -l"):gsub("^%s*(.-)%s*$", "%1")
+                stats.commits = vim.fn.system("git rev-list --count HEAD 2>/dev/null"):gsub("^%s*(.-)%s*$", "%1")
+                stats.branches = vim.fn.system("git branch --list 2>/dev/null | wc -l"):gsub("^%s*(.-)%s*$", "%1")
+                stats.contributors = vim.fn.system("git shortlog -s HEAD | wc -l"):gsub("^%s*(.-)%s*$", "%1")
+                stats.last_commit = vim.fn.system("git log -1 --pretty=%s"):gsub("^%s*(.-)%s*$", "%1")
+            end
 
+            -- Get total project files (including untracked)
+            local total_files = vim.fn.system('find . -type f -not -path "*/\\.*" | wc -l'):gsub("^%s*(.-)%s*$", "%1")
 
+            return {
+                "┌ Project Overview ──────────────────────",
+                "│",
+                "├─ 📂 Project: " .. get_project_name(),
+                "├─ 📝 Last Modified: " .. get_last_modified(),
+                "├─ ⏰ Current Time: " .. os.date("%H:%M:%S"),
+                "├─ 📅 Date: " .. os.date("%A, %d %B %Y"),
+                "│",
+                "├ Files & Storage ───────────────────────",
+                "│",
+                "├─ 📁 Total Files: " .. total_files,
+                "│",
+                "├ Git Statistics ────────────────────────",
+                "│",
+                "├─ 📊 Repository Stats:",
+                "│  ├─ 📂 Tracked Files: " .. stats.files,
+                "│  ├─ 🔀 Branches: " .. stats.branches,
+                "│  ├─ 📝 Commits: " .. stats.commits,
+                "│  ├─ 👥 Contributors: " .. stats.contributors,
+                "│  └─ 🔄 Last Commit: " .. stats.last_commit:sub(1, 50) .. (stats.last_commit:len() > 50 and "..." or ""),
+                "│",
+                "└────────────────────────────────────────"
+            }
+        end
+
+        -- Random programming tips
+        local function get_random_tip()
+            local tips = {
+                "💡 Press 'gcc' to comment out a line",
+                "💡 Use 'zi' to toggle fold",
+                "💡 Press 'gd' to go to definition",
+                "💡 Use 'K' to show documentation",
+                "💡 Press 'gr' to show references",
+                "💡 Use 'gc' for line comment",
+                "💡 Press 'gf' to go to file under cursor",
+            }
+            return tips[math.random(1, #tips)]
+        end
+
+        local welcomeText = generateText.generateWelcome()
+
+        -- Cool ASCII art header
         dashboard.section.header.val = {
-            [[                                                                                                                                                                                               ]],
-            [[                                                                                                                                                                                               ]],
-            [[                                                                                                                                                                                               ]],
-            [[                                                                                             .....                                                                                             ]],
-            [[                                                                                          ...@@@@@@@.                                                                                          ]],
-            [[                                                                                         .@@@@@@@@@@@@                                                                                         ]],
-            [[                                                                                        .@@@@@@@@@@@@@@                                                                                        ]],
-            [[                                                                                        .@@@@@@@@@@@@@@                                                                                        ]],
-            [[                                                                                        @..@@@....@@@@@                                                                                        ]],
-            [[                                                                                        @@@@@@@@@@@@@@@@@@@@@...........                                                                       ]],
-            [[                                                                                        @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@..                                                                 ]],
-            [[                                                                                      ..@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@...                                                            ]],
-            [[                                                                                    ...@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@......                                                     ]],
-            [[                                                                                  ...@@@@@@@@@@@@@@@@@@@@@@                   @@@@@@@@@@.                                                      ]],
-            [[                                                                                 ..@@@@@@@@@@@@@@@@@@@@@@@                          @@@@.                                                      ]],
-            [[                                                                                @.@@@@@@@@@@@@@@@@@@@@@@@                              @.                                                      ]],
-            [[                                                                               @@@@@@@@@@@@@@@@@@@@@@@@@                                                                                       ]],
-            [[                                                                               @@@@@@@@@@@@@@@@@@@@@@@@                                                                                        ]],
-            [[                                                                               @@@@@@@@@@@@@@@@@@@@@@@                                                                                         ]],
-            [[                                                                              .@@@@@@@@@@@@@@@@@@@@@                                                                                           ]],
-            [[                                                                            ...@@@@@@@@@@@@@@@@@@@@                                                                                            ]],
-            [[                                                                          ...@@@@@@@@@@@@@@@@@@@@@.                                                                                            ]],
-            [[                                                                     ......@@@@@@@@@@@@@@@@@@@@@@@@@.......                                                                                    ]],
-            [[                                                                  ....@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@.@@@.                                                                                 ]],
-            [[                                                               ....@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                                                ]],
-            [[                                                           ....@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                                               ]],
-            [[                                                        ...@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                                                ]],
-            [[                                                    ...@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                                                 ]],
-            [[                                                ...@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                                                                                  ]],
-            [[                                              ..@@@@@@@@@@@@@@@@@@             @@@@@@             @@@@@@@@@                                                                                    ]],
-            [[                                             @@@@@@@@@@@@@                     @@@@@@             @@@@@@@@                                                                                     ]],
-            [[                                           .@@@@@@@@@@@@                       @@@@@@            @@@@@@@                                                                                       ]],
-            [[                                         .@@@@@@@@@@@@                          @@@@@           @@@@@@@                                                                                        ]],
-            [[                                       .@@@@@@@@@                                @@@@@          @@@@@@@                                                                                        ]],
-            [[                                   ..@@@@@@@@@                                   @@@@@         @@@@@@@@@                                                                                       ]],
-            [[                            .....@@@@@@@@@@                                      .@@@@@        @@@@@@@@@@@.                                                                                    ]],
-            [[                         ......@@@@@@@@@                                        @@@@@@@@       @@@@@@@@@@@@...                                                                                 ]],
-            [[                        .@@@@@@@@@@@@@@                                         @@.@@@@@@           @@@@@@@@@@@                                                                                ]],
-            [[                           @@@@@@@@@                                           .@@@@@@@@@@                @@@@@                                                                                ]],
-            [[                                                                               @ @@@@ @@@@@                                                                                                    ]],
-            [[                                                                                                                                                                                               ]],
-            [[                                                                                                                                                                                               ]],
-            [[                                                                                                                                                                                               ]],
-            -- [[                                                                                                                                                                       ]],
-            -- [[                                                                               .:=++***+                                                                               ]],
-            -- [[                                                                              =+#########                                                                              ]],
-            -- [[                                                                             =*###%%##%###                                                                             ]],
-            -- [[                                                                             =#%%#%%%%@%##                                                                             ]],
-            -- [[                                                                             *...%=..-@%#*:---                                                                         ]],
-            -- [[                                                                             #%%%%%%%%%%#######*-:..:.::..                                                             ]],
-            -- [[                                                                             *%%%%%%%%%%%%%%%%%#%#%%%%%%#####+-:                                                       ]],
-            -- [[                                                                           :=#%%%%%%%%%%%%%%%%%%%%%%%%@%%%%%%%%#*#-:                                                   ]],
-            -- [[                                                                        ::-+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%+===.                                              ]],
-            -- [[                                                                       =-=#%%%%@%%%%%%%%%%%%%#                  %%%%%%%+.                                              ]],
-            -- [[                                                                      --+#%%%%%%%%%%%%%%%%%%#                        %%%.                                              ]],
-            -- -- [[                                                                     #+###%%%%%%%%%%%%%%%%%%                                                                           ]],
-            -- -- [[                                                                     *####%%%%%%%%%%%%%%%%%                                                                            ]],
-            -- [[                                                                     ##%%%%%%%%%%%%%%%%%%%                                                                             ]],
-            -- [[                                                                    *%%%%%%%%%%%%%%%%%%%                                                                               ]],
-            -- [[                                                                   :-#%%%%%@%%%%%%%%%%%                                                                                ]],
-            -- [[                                                                 .:*%#%%%%@@%%%%%%%%@%                                                                                 ]],
-            -- [[                                                             ....+%@@#%%@@@@%%%%%@@@%%*:....                                                                           ]],
-            -- [[                                                          ...=*#%@@@@%%%@@@@@@@@@@@@@@@@%#+=----                                                                       ]],
-            -- [[                                                       ..-+#%%@@@@@@@%%%@@@@@@@@@@@@@@@@@@@@%@@@%                                                                      ]],
-            -- [[                                                   :..-+#%%@@@@@@@@@@%%@@@@@@@@@@@@@@@@@@@@@@@@@%%                                                                     ]],
-            -- [[                                                :--=*%%@@@@@@@@@@@@@%%@@@@@@@@@@@@@@@@@@@@@@@@@@@%                                                                     ]],
-            -- [[                                            ..:=%%%%@@@@@@@@@@@@@@@@%%%%%@@@@@@@@@@@@@@@@@@@@@@%%                                                                      ]],
-            -- [[                                         -:-*#%%%@@@@@@@@@@@%%%%%%%%%@%%%%%#######%%%%%@@@@@@%%                                                                        ]],
-            -- [[                                       =*#%%%@%%%%%%%%%%%%%%%       @@%%%%            #%%%@%%%                                                                         ]],
-            -- [[                                      +#%%%%%%%%%%%                  @%%%%            %%%%%%%                                                                          ]],
-            -- [[                                    +#%%%%%%%%%##                    @@%%%           #%%%%%                                                                            ]],
-            -- [[                                  +*#%%%%%%%%%                        %%%%%         *%%%%%                                                                             ]],
-            -- [[                               =**%%%%%%%#                             %%%%        +#%%%%%*                                                                            ]],
-            -- [[                         ::=-:=#%%%%%#                                 %%%%        #%%%%%%%++                                                                          ]],
-            -- [[                      ::-=+*#%%%%%%#                                   *%%%%       #%%%%%%%%*=:                                                                        ]],
-            -- [[                    -+*+++#%%%%%%%                                    #%%@@%#       %%@@%%%%%##**                                                                      ]],
-            -- [[                    *#%%%%%%@@@%%                                    *%+%%@%%%           @@%@@%%%#                                                                     ]],
-            -- [[                        @@@@                                         *%**% %%@%               @%%                                                                      ]],
-            -- [[                                                                       %%   %%                                                                                         ]],
-            -- [[                                                                                                                                                                       ]],
+            [[                   ,,,, ]],
+            [[             ,;) .';;;;',]],
+            [[ ;;,,_,-.-.,;;'_,|I\;;;/),,_]],
+            [[  `';;/:|:);{ ;;;|| \;/ /;;;\__]],
+            [[      L;/-';/ \;;\',/;\/;;;.') \]],
+            [[      .:`''` - \;;'.__/;;;/  . _'-._ ]],
+            [[    .'/   \     \;;;;;;/.'_7:.  '). \_]],
+            [[  .''/     | '._ );}{;//.'    '-:  '.,L]],
+            [[.'. /       \  ( |;;;/_/         \._./;\   _,]],
+            [[ . /        |\ ( /;;/_/             ';;;\,;;_,]],
+            [[. /         )__(/;;/_/                (;;''''']],
+            [[ /        _;:':;;;;:';-._             );]],
+            [[/        /   \  `'`   --.'-._         \/]],
+            [[       .'     '.  ,'         '-,]],
+            [[      /    /   r--,..__       '.\]],
+            [[    .'    '  .'        '--._     |]],
+            [[    (     :.(;>        _ .' '- ;/]],
+            [[    |      /:;(    ,_.';(   __.']],
+            [[     '- -'"|;:/    (;;;;-'--']],
+            [[           |;/      ;;(]],
+            [[           ''      /;;|]],
+            [[                   \;;|]],
+            [[                    \/]],
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        --
-        --
-        -- -- Custom header
         -- dashboard.section.header.val = {
-        --     [[                                                                                                                                                                                          ]],
-        --     [[                                                                                                                                                                                          ]],
-        --     [[                                                         SSSSSSSSSSSSSSS                                                                                                                  ]],
-        --     [[                                                       SS:::::::::::::::S                                                                                                                 ]],
-        --     [[                                                      S:::::SSSSSS::::::S                                                                                                                 ]],
-        --     [[                                                      S:::::S     SSSSSSS                                                                                                                 ]],
-        --     [[                                                      S:::::S              aaaaaaaaaaaaa      mmmmmmm    mmmmmmm       ssssssssss                                                         ]],
-        --     [[                                                      S:::::S              a::::::::::::a   mm:::::::m  m:::::::mm   ss::::::::::s                                                        ]],
-        --     [[                                                       S::::SSSS           aaaaaaaaa:::::a m::::::::::mm::::::::::mss:::::::::::::s                                                       ]],
-        --     [[                                                        SS::::::SSSSS               a::::a m::::::::::::::::::::::ms::::::ssss:::::s                                                      ]],
-        --     [[                                                          SSS::::::::SS      aaaaaaa:::::a m:::::mmm::::::mmm:::::m s:::::s  ssssss                                                       ]],
-        --     [[                                                             SSSSSS::::S   aa::::::::::::a m::::m   m::::m   m::::m   s::::::s                                                            ]],
-        --     [[                                                                  S:::::S a::::aaaa::::::a m::::m   m::::m   m::::m      s::::::s                                                         ]],
-        --     [[                                                                  S:::::Sa::::a    a:::::a m::::m   m::::m   m::::mssssss   s:::::s                                                       ]],
-        --     [[                                                      SSSSSSS     S:::::Sa::::a    a:::::a m::::m   m::::m   m::::ms:::::ssss::::::s                                                      ]],
-        --     [[                                                      S::::::SSSSSS:::::Sa:::::aaaa::::::a m::::m   m::::m   m::::ms::::::::::::::s                                                       ]],
-        --     [[                                                      S:::::::::::::::SS  a::::::::::aa:::am::::m   m::::m   m::::m s:::::::::::ss                                                        ]],
-        --     [[                                                       SSSSSSSSSSSSSSS     aaaaaaaaaa  aaaammmmmm   mmmmmm   mmmmmm  sssssssssss                                                          ]],
-        --     [[                                                                                                                                                                                          ]],
-        --     [[                                                                                                                                                                                          ]],
-        --     [[                                                                           kkkkkkkk                                                                                                       ]],
-        --     [[                                                                           k::::::k                                                                                                       ]],
-        --     [[                                                                           k::::::k                                                                                                       ]],
-        --     [[                                                                           k::::::k                                                                                                       ]],
-        --     [[wwwwwww           wwwww           wwwwwww ooooooooooo   rrrrr   rrrrrrrrr   k:::::k    kkkkkkk  ssssssssss   ppppp   ppppppppp     aaaaaaaaaaaaa      cccccccccccccccc    eeeeeeeeeeee    ]],
-        --     [[ w:::::w         w:::::w         w:::::woo:::::::::::oo r::::rrr:::::::::r  k:::::k   k:::::k ss::::::::::s  p::::ppp:::::::::p    a::::::::::::a   cc:::::::::::::::c  ee::::::::::::ee  ]],
-        --     [[  w:::::w       w:::::::w       w:::::wo:::::::::::::::or:::::::::::::::::r k:::::k  k:::::kss:::::::::::::s p:::::::::::::::::p   aaaaaaaaa:::::a c:::::::::::::::::c e::::::eeeee:::::ee]],
-        --     [[   w:::::w     w:::::::::w     w:::::w o:::::ooooo:::::orr::::::rrrrr::::::rk:::::k k:::::k s::::::ssss:::::spp::::::ppppp::::::p           a::::ac:::::::cccccc:::::ce::::::e     e:::::e]],
-        --     [[    w:::::w   w:::::w:::::w   w:::::w  o::::o     o::::o r:::::r     r:::::rk::::::k:::::k   s:::::s  ssssss  p:::::p     p:::::p    aaaaaaa:::::ac::::::c     ccccccce:::::::eeeee::::::e]],
-        --     [[     w:::::w w:::::w w:::::w w:::::w   o::::o     o::::o r:::::r     rrrrrrrk:::::::::::k      s::::::s       p:::::p     p:::::p  aa::::::::::::ac:::::c             e:::::::::::::::::e ]],
-        --     [[      w:::::w:::::w   w:::::w:::::w    o::::o     o::::o r:::::r            k:::::::::::k         s::::::s    p:::::p     p:::::p a::::aaaa::::::ac:::::c             e::::::eeeeeeeeeee  ]],
-        --     [[       w:::::::::w     w:::::::::w     o::::o     o::::o r:::::r            k::::::k:::::k  ssssss   s:::::s  p:::::p    p::::::pa::::a    a:::::ac::::::c     ccccccce:::::::e           ]],
-        --     [[        w:::::::w       w:::::::w      o:::::ooooo:::::o r:::::r           k::::::k k:::::k s:::::ssss::::::s p:::::ppppp:::::::pa::::a    a:::::ac:::::::cccccc:::::ce::::::::e          ]],
-        --     [[         w:::::w         w:::::w       o:::::::::::::::o r:::::r           k::::::k  k:::::ks::::::::::::::s  p::::::::::::::::p a:::::aaaa::::::a c:::::::::::::::::c e::::::::eeeeeeee  ]],
-        --     [[          w:::w           w:::w         oo:::::::::::oo  r:::::r           k::::::k   k:::::ks:::::::::::ss   p::::::::::::::pp   a::::::::::aa:::a cc:::::::::::::::c  ee:::::::::::::e  ]],
-        --     [[           www             www            ooooooooooo    rrrrrrr           kkkkkkkk    kkkkkkksssssssssss     p::::::pppppppp      aaaaaaaaaa  aaaa   cccccccccccccccc    eeeeeeeeeeeeee  ]],
-        --     [[                                                                                                              p:::::p                                                                     ]],
-        --     [[                                                                                                              p:::::p                                                                     ]],
-        --     [[                                                                                                             p:::::::p                                                                    ]],
-        --     [[                                                                                                             p:::::::p                                                                    ]],
-        --     [[                                                                                                             p:::::::p                                                                    ]],
-        --     [[                                                                                                             ppppppppp                                                                    ]],
-        --     [[                                                                                                                                                                                          ]],
+        --     [[          ⣴⣶⣤⡤⠦⣤⣀⣤⠆     ⣈⣭⣭⣿⣶⣿⣦⣼⣆         ]],
+        --     [[           ⠉⠻⢿⣿⠿⣿⣿⣶⣦⠤⠄⡠⢾⣿⣿⡿⠋⠉⠉⠻⣿⣿⡛⣦       ]],
+        --     [[                 ⠈⢿⣿⣟⠦ ⣾⣿⣿⣷⠄⠄⠄⠄⠻⠿⢿⣿⣧⣄     ]],
+        --     [[                  ⣸⣿⣿⢧ ⢻⠻⣿⣿⣷⣄⣀⠄⠢⣀⡀⠈⠙⠿⠄    ]],
+        --     [[                 ⢠⣿⣿⣿⠈  ⠡⠌⣻⣿⣿⣿⣿⣿⣿⣿⣛⣳⣤⣀⣀   ]],
+        --     [[          ⢠⣧⣶⣥⡤⢄ ⣸⣿⣿⠘⠄ ⢀⣴⣿⣿⡿⠛⣿⣿⣧⠈⢿⠿⠟⠛⠻⠿⠄  ]],
+        --     [[         ⣰⣿⣿⠛⠻⣿⣿⡦⢹⣿⣷   ⢊⣿⣿⡏  ⢸⣿⣿⡇ ⢀⣠⣄⣾⠄   ]],
+        --     [[        ⣠⣿⠿⠛⠄⢀⣿⣿⣷⠘⢿⣿⣦⡀ ⢸⢿⣿⣿⣄ ⣸⣿⣿⡇⣪⣿⡿⠿⣿⣷⡄  ]],
+        --     [[        ⠙⠃   ⣼⣿⡟  ⠈⠻⣿⣿⣦⣌⡇⠻⣿⣿⣷⣿⣿⣿ ⣿⣿⡇⠄⠛⠻⢷⣄ ]],
+        --     [[             ⢻⣿⣿⣄   ⠈⠻⣿⣿⣿⣷⣿⣿⣿⣿⣿⡟ ⠫⢿⣿⡆     ]],
+        --     [[              ⠻⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⡟⢀⣀⣤⣾⡿⠃     ]],
         -- }
         --
-        -- Custom menu
-        dashboard.section.buttons.val = {
-            dashboard.button('n', '  New File', ':ene <BAR> startinsert <CR>'),
-            dashboard.button('f', '  Find File', ':Telescope find_files<CR>'),
-            -- dashboard.button('r', '  Recent Files', ':Telescope oldfiles<CR>'),
-            dashboard.button('g', '  Find Text', ':Telescope live_grep<CR>'),
-            dashboard.button('m', '  Mason', ':Mason<CR>'),
-            dashboard.button('l', '  Lazy', ':Lazy<CR>'),
-            dashboard.button('c', '  Configuration', ':e $MYVIMRC<CR>'),
-            -- dashboard.button('p', '  Projects', ':Telescope projects<CR>'),
-            dashboard.button('t', '  Todo', ':TodoTelescope<CR>'),
-            dashboard.button('s', '  Sessions', ':Telescope persisted<CR>'),
-            -- dashboard.button('h', '  Themes', ':Telescope colorscheme<CR>'),
-            dashboard.button('k', '  Keymaps', ':Telescope keymaps<CR>'),
-            dashboard.button('e', '  Explorer', ':NvimTreeToggle<CR>'),
-            dashboard.button('q', '  Quit', ':qa<CR>'),
-        }
+        -- Enhanced buttons with icons
+        -- dashboard.section.buttons.val = {
+        --     dashboard.button('n', '  New File', ':ene <BAR> startinsert <CR>'),
+        --     dashboard.button('f', '  Find File', ':Telescope find_files<CR>'),
+        --     dashboard.button('g', ' 󰱼 Find Text', ':Telescope live_grep<CR>'),
+        --     dashboard.button('e', '  Explorer', ':NvimTreeToggle<CR>'),
+        --     dashboard.button('q', '  Quit', ':qa<CR>'),
+        -- }
 
-        -- Footer
-        dashboard.section.footer.val = {
+        -- Get all stats and combine sections
+        local stats = get_project_stats()
+        dashboard.section.footer.val = vim.list_extend({
+            welcomeText,
             '',
-            '🚀 Ready to code!',
+            get_random_tip(),
+            '',
+        }, stats)
+
+        -- Layout with proper spacing
+        dashboard.config.layout = {
+            { type = "padding", val = 2 },
+            dashboard.section.header,
+            { type = "padding", val = 2 },
+            -- dashboard.section.buttons,
+            -- { type = "padding", val = 2 },
+            dashboard.section.footer,
         }
 
         alpha.setup(dashboard.config)
+
+        -- Auto-refresh stats when returning to dashboard
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "AlphaReady",
+            callback = function()
+                dashboard.section.footer.val = vim.list_extend({
+                    welcomeText,
+                    '',
+                    get_random_tip(),
+                    '',
+                }, get_project_stats())
+                vim.cmd("redraw")
+            end,
+        })
+
+        -- Refresh time every minute
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "AlphaClosed",
+            callback = function()
+                if _G.alpha_timer then
+                    _G.alpha_timer:stop()
+                    _G.alpha_timer:close()
+                end
+            end,
+        })
+
+        vim.api.nvim_create_autocmd("User", {
+            pattern = "AlphaReady",
+            callback = function()
+                _G.alpha_timer = vim.loop.new_timer()
+                _G.alpha_timer:start(0, 60000, vim.schedule_wrap(function()
+                    if vim.bo.filetype == "alpha" then
+                        alpha.redraw()
+                    end
+                end))
+            end,
+        })
     end,
 }

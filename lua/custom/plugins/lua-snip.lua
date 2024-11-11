@@ -12,7 +12,10 @@ return {
             local s = ls.snippet
             local t = ls.text_node
             local i = ls.insert_node
+            local f = ls.function_node
             local fmt = require("luasnip.extras.fmt").fmt
+
+            local generateId = require("custom.scripts.generateId")
 
             -- Load friendly-snippets
             require("luasnip.loaders.from_vscode").lazy_load()
@@ -24,6 +27,11 @@ return {
                     -- equivalent to "${1:cond} ? ${2:then} : ${3:else}"
                     i(1, "cond"), t(" ? "), i(2, "then"), t(" : "), i(3, "else")
                 }),
+                s("genid", {
+                    f(function()
+                        return generateId.generateId()
+                    end)
+                })
             })
 
             ls.add_snippets("javascript", {
