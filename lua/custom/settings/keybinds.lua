@@ -35,6 +35,8 @@ function M.setup()
     -- Custom keymaps
     vim.keymap.set("n", "<leader>cls", "0d$", { desc = "Clear lines contents" })              -- Clears current line of all text
     vim.keymap.set("n", "<leader>nl", "yyp0d$", { desc = "New empty line - no insert mode" }) -- Adds a new empty line below the current, but auto escapes the insert mode
+
+    vim.keymap.set("n", "<Esc>", ":noh<CR>", { silent = true })                               -- Allows you to hit escape to stop looking at highlighted text after searching
 end
 
 return M

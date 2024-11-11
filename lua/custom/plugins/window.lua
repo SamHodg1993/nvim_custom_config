@@ -8,6 +8,7 @@ return {
             -- vim.keymap.set('n', '<C-w>-', ':split<CR>', { desc = 'Split window horizontally' })
             vim.keymap.set('n', '<leader>w|', ':vsplit<CR>', { desc = 'Split window vertically' })
             vim.keymap.set('n', '<leader>w-', ':split<CR>', { desc = 'Split window horizontally' })
+            vim.keymap.set('n', '<leader>wq', ':q', { desc = 'Split window horizontally' })
 
             -- Set better split defaults
             vim.opt.splitbelow = true
@@ -22,10 +23,10 @@ return {
             vim.keymap.set('n', '<A-Right>', smart_splits.resize_right)
 
             -- Moving between splits
-            vim.keymap.set('n', '<M-C-Left>', smart_splits.move_cursor_left)
-            vim.keymap.set('n', '<M-C-Down>', smart_splits.move_cursor_down)
-            vim.keymap.set('n', '<M-C-Up>', smart_splits.move_cursor_up)
-            vim.keymap.set('n', '<M-C-Right>', smart_splits.move_cursor_right)
+            vim.keymap.set('n', '<C-Left>', smart_splits.move_cursor_left)
+            vim.keymap.set('n', '<C-Down>', smart_splits.move_cursor_down)
+            vim.keymap.set('n', '<C-Up>', smart_splits.move_cursor_up)
+            vim.keymap.set('n', '<C-Right>', smart_splits.move_cursor_right)
 
             -- Quick window commands
             vim.keymap.set('n', '<C-w>z', '<C-w>|<C-w>_', { desc = 'Zoom window' })
