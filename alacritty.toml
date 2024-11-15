@@ -1,0 +1,123 @@
+[colors.bright]
+black = "#656565"
+blue = "#22c3a1"
+cyan = "#84edb9"
+green = "#8fee96"
+magenta = "#775759"
+red = "#d75f5f"
+white = "#d8d8d8"
+yellow = "#cd950c"
+
+[colors.cursor]
+cursor = "#8fee96"
+text = "#2f2f2f"
+
+[colors.normal]
+black = "#2f2f2f"
+blue = "#22c3a1"
+cyan = "#84edb9"
+green = "#d4d232"
+magenta = "#775759"
+red = "#d75f5f"
+white = "#c0b18b"
+yellow = "#af865a"
+
+[colors.primary]
+background = "#262626"
+foreground = "#c0b18b"
+
+[colors.selection]
+background = "#d75f5f"
+text = "#2f2f2f"
+
+[cursor]
+blink_interval = 500
+unfocused_hollow = true
+
+[cursor.style]
+shape = "Block"
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "Iosevka NF"
+style = "Bold Italic"
+
+[[keyboard.bindings]]
+action = "Paste"
+key = "V"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "Copy"
+key = "C"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "PasteSelection"
+key = "Insert"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "ScrollPageUp"
+key = "PageUp"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "ScrollPageDown"
+key = "PageDown"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "ScrollToTop"
+key = "Home"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "ScrollToBottom"
+key = "End"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "CreateNewWindow"
+key = "T"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "Quit"
+key = "W"
+mods = "Control|Shift"
+
+[[keyboard.bindings]]
+action = "IncreaseFontSize"
+key = "Equals"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "DecreaseFontSize"
+key = "Minus"
+mods = "Control"
+
+[[keyboard.bindings]]
+action = "ResetFontSize"
+key = "Key0"
+mods = "Control"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 2000
+multiplier = 5
+
+[window]
+decorations = "buttonless" # Options are full, none, transparent, buttonless
+opacity = 0.9
+
+[window.dimensions]
+columns = 180
+lines = 50
+
+[window.padding]
+x = 15
