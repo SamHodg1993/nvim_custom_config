@@ -34,6 +34,14 @@ return {
                 })
             })
 
+
+            ls.add_snippets("go", {
+                -- Console log snippet
+                s("iferr", {
+                    t("if err != nil {"), i(1, ""), t("}")
+                }),
+            })
+
             ls.add_snippets("javascript", {
                 -- Console log snippet
                 s("clg", {
