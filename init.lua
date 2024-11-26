@@ -34,6 +34,13 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 
+vim.api.nvim_create_autocmd("FileType", {
+  pattern= "*",
+  callback= function() 
+  vim.opt.formatoptions:remove({ "r", "o"})
+end
+})
+
 -- Initialize lazy.nvim
 require("lazy").setup({
     -- Plugins will go here
