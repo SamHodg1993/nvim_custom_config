@@ -6,9 +6,9 @@ return {
             -- Better window creation with same keybinds you would have used in tmux
             -- vim.keymap.set('n', '<C-w>|', ':vsplit<CR>', { desc = 'Split window vertically' })
             -- vim.keymap.set('n', '<C-w>-', ':split<CR>', { desc = 'Split window horizontally' })
-            vim.keymap.set('n', '<leader>w|', ':vsplit<CR>', { desc = 'Split window vertically' })
-            vim.keymap.set('n', '<leader>w-', ':split<CR>', { desc = 'Split window horizontally' })
-            vim.keymap.set('n', '<leader>wq', ':q', { desc = 'Split window horizontally' })
+            vim.keymap.set('n', '<leader>wv', ':vsplit<CR>', { desc = 'Split window vertically' })
+            vim.keymap.set('n', '<leader>wh', ':split<CR>', { desc = 'Split window horizontally' })
+            vim.keymap.set('n', '<leader>wq', ':q<CR>', { desc = 'Split window horizontally' })
 
             -- Set better split defaults
             vim.opt.splitbelow = true
