@@ -14,7 +14,7 @@ function M.generateId()
         "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" }
 
     local strArr = {}
-    for i = 1, 16 do
+    for i = 1, 15 do
         -- Generate a random number (corrected range)
         local randNum = math.random(1, #availChar)
         strArr[i] = availChar[randNum]
