@@ -72,6 +72,16 @@ return {
                 }),
             })
 
+            ls.add_snippets("typescriptreact", {
+                s("subbtn", {
+                    t({ "<button onClick={() => console.log(" }),
+                    i(1, ""),
+                    t({ ")}>" }),
+                    t({ "", "  " }), i(2, "log"),
+                    t({ "", "</button>" }),
+                }),
+            })
+
             -- Keymaps
             vim.keymap.set({ "i", "s" }, "<C-k>", function()
                 if ls.expand_or_jumpable() then
