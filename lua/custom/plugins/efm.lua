@@ -26,31 +26,31 @@ return {
       }
 
       -- Configure efm with all the languages
-      lspconfig.efm.setup({
-        init_options = { documentFormatting = true },
-        filetypes = {
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
-          "css",
-          "scss",
-          "sass",
-          "go",
-        },
-        settings = {
-          languages = {
-            javascript = { prettier, eslint },
-            javascriptreact = { prettier, eslint },
-            typescript = { prettier, eslint },
-            typescriptreact = { prettier, eslint },
-            css = { prettier },
-            scss = { prettier },
-            sass = { prettier },
-            go = { goimports },
-          }
-        }
-      })
+      -- lspconfig.efm.setup({
+      --   init_options = { documentFormatting = true },
+      --   filetypes = {
+      --     "javascript",
+      --     "javascriptreact",
+      --     "typescript",
+      --     "typescriptreact",
+      --     "css",
+      --     "scss",
+      --     "sass",
+      --     "go",
+      --   },
+      --   settings = {
+      --     languages = {
+      --       javascript = { prettier, eslint },
+      --       javascriptreact = { prettier, eslint },
+      --       typescript = { prettier, eslint },
+      --       typescriptreact = { prettier, eslint },
+      --       css = { prettier },
+      --       scss = { prettier },
+      --       sass = { prettier },
+      --       go = { goimports },
+      --     }
+      --   }
+      -- })
 
       -- Set up autoformatting
       vim.api.nvim_create_autocmd("BufWritePre", {

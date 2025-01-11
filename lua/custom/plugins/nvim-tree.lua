@@ -28,7 +28,7 @@ return {
                 },
             },
             filters = {
-                dotfiles = false,  -- Hide dotfiles
+                dotfiles = true,  -- Hide dotfiles
             },
             git = {
                 enable = true,
