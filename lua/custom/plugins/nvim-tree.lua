@@ -28,11 +28,12 @@ return {
                 },
             },
             filters = {
-                dotfiles = true,  -- Hide dotfiles
+                dotfiles = false,  -- Hide dotfiles
+                exclude = { ".env" }, -- Show .env filed
             },
             git = {
                 enable = true,
-                ignore = true,  -- Show git ignored files
+                ignore = false,  -- Show git ignored files
             },
             actions = {
                 open_file = {
