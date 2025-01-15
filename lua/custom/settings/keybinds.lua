@@ -37,6 +37,8 @@ function M.setup()
     vim.keymap.set("n", "<leader>nl", "yyp0d$", { desc = "New empty line - no insert mode" }) -- Adds a new empty line below the current, but auto escapes the insert mode
 
     vim.keymap.set("n", "<Esc>", ":noh<CR>", { silent = true })                               -- Allows you to hit escape to stop looking at highlighted text after searching
+
+    vim.keymap.set("x", "p", "pgvy", {desc = "Rebinds the paste to ensure the copied data remains in the clipboard"})
 end
 
 return M
