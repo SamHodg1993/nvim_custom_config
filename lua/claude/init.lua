@@ -1,21 +1,19 @@
--- nvim-claude/lua/claude.lua
 local M = {}
 local api = vim.api
 local curl = require('plenary.curl')
-
--- Configuration
-M.config = {
-    api_key = nil,
-    max_tokens = 500,
-    temperature = 0.7
-}
+local config = require('claude.config')
 
 function M.setup(opts)
-    M.config = vim.tbl_deep_extend('force', M.config, opts or {})
+    -- Load configuration
+    M.config = config.load(opts)
     
-    -- Ensure API key is set
+    -- Ensure API key is available
     if not M.config.api_key then
-        error('Claude API key not set. Please set it in setup()')
+        vim.notify(
+            "Claude API key not found. Please set CLAUDE_API_KEY environment variable or create claude_local_config.lua",
+            vim.log.levels.ERROR
+        )
+        return
     end
 end
 
