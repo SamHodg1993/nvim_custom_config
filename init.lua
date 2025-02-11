@@ -58,5 +58,9 @@ require("lazy").setup({
     },
 })
 
+-- Initialize claude ai inline code completion custom plugin 
+require("claude").setup({max_tokens=500, temperature=0.7})
+require("claude").setup_keymaps()
+
 -- Import custom keybinds.
 require("custom.settings.keybinds").setup()
