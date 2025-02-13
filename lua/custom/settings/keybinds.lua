@@ -39,6 +39,12 @@ function M.setup()
     vim.keymap.set("n", "<Esc>", ":noh<CR>", { silent = true })                               -- Allows you to hit escape to stop looking at highlighted text after searching
 
     vim.keymap.set("x", "p", "pgvy", {desc = "Rebinds the paste to ensure the copied data remains in the clipboard"})
+
+    -- Parrot ai keybinds
+    vim.keymap.set({'n', 'v'}, '<leader>ac', ':PrtChatNew<CR>', { desc = 'Create a new parrot ai chat window' })
+    vim.keymap.set({'n', 'v'}, '<leader>ap', ':PrtChatNew popup<CR>', { desc = 'Create a new parrot ai chat popup' })
+    vim.keymap.set({'n', 'v'}, '<leader>ai', ':PrtImplement<CR>', { desc = 'Parrot ai implement comment as prompt' })
+    vim.keymap.set({'n', 'v'}, '<leader>aa', ':PrtAsk<CR>', { desc = 'Parrot ai ask question' })
 end
 
 return M
