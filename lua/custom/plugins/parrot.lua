@@ -1,6 +1,6 @@
 return {
   "frankroeder/parrot.nvim",
-  dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim' },
+  dependencies = { 'ibhagwan/fzf-lua', 'nvim-lua/plenary.nvim',"rcarriga/nvim-notify"   },
   -- optionally include "rcarriga/nvim-notify" for beautiful notifications
   config = function()
     require("parrot").setup {
@@ -37,7 +37,7 @@ return {
         },
       },
       -- Local chat buffer shortcuts
-      chat_shortcut_respond = { modes = { "n", "i", "v", "x" }, shortcut = "<leader>ae" },
+      chat_shortcut_respond = { modes = { "n", "i", "v", "x" }, shortcut = "<C-e>" },
       chat_shortcut_delete = { modes = { "n", "i", "v", "x" }, shortcut = "<C-g>d" },
       chat_shortcut_stop = { modes = { "n", "i", "v", "x" }, shortcut = "<C-g>s" },
       chat_shortcut_new = { modes = { "n", "i", "v", "x" }, shortcut = "<C-g>c" },
