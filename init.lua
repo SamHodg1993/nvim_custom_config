@@ -59,5 +59,54 @@ require("lazy").setup({
     },
 })
 
+-- Function to reset diagnostic display and restart LSP
+function ResetLspDiagnostics()
+  -- Reset diagnostic configuration with all display options enabled
+  vim.diagnostic.config({
+    underline = true,
+    virtual_text = true,
+    signs = true,
+    float = {
+      border = "rounded",
+      focusable = false,
+      source = "always"
+    }
+  })
+  
+  -- Restart all LSP clients
+  vim.cmd('LspRestart')
+  
+  -- Optional: Display a confirmation message
+  print("LSP diagnostics reset and servers restarted!")
+end
+
+-- Function to start the LSP fix on nvim startup
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function()
+    -- Use a timer to ensure all LSP servers are fully initialized
+    vim.defer_fn(function()
+      -- Only set the diagnostic config, don't restart LSP since they just started
+      vim.diagnostic.config({
+        underline = true,
+        virtual_text = true,
+        signs = true,
+        float = {
+          border = "rounded",
+          focusable = false,
+          source = "always"
+        }
+      })
+      print("LSP diagnostic settings applied automatically!")
+    end, 1000) -- 1 second delay
+  end,
+  -- Run once only
+  once = true,
+})
+
+-- Create a user command to easily call this function
+vim.api.nvim_create_user_command('CustomLspRestart', function()
+  ResetLspDiagnostics()
+end, {})
+
 -- Import custom keybinds.
 require("custom.settings.keybinds").setup()
