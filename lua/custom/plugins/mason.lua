@@ -33,6 +33,7 @@ return {
                     "gopls",           -- Go
                     "cssls",           -- CSS
                     "html",            -- HTML
+                    "pyright",         -- Python
                 },
                 automatic_installation = true,
             })
@@ -61,6 +62,10 @@ return {
             })
 
             lspconfig.html.setup({
+                capabilities = capabilities,
+            })
+
+            lspconfig.pyright.setup({
                 capabilities = capabilities,
             })
 
@@ -102,3 +107,4 @@ return {
         end,
     },
 }
+
